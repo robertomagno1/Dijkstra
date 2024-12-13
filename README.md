@@ -9,7 +9,8 @@ This repository provides an implementation of [Dijkstra’s Algorithm](https://e
 - A starting (source) node \( s \in V \).
 
 **Goal:**  
-Find the shortest path from \( s \) to every other vertex \( v \in V \).
+Find the shortest path from \( s \) to every other vertex $ v \in V $
+.
 
 ### Initialization
 
