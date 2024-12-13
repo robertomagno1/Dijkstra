@@ -1,42 +1,131 @@
-# Dijkstra's Algorithm
+# Dijkstra’s Algorithm - A Shortest Path Approach
 
-Dijkstra's algorithm is a graph search algorithm that solves the shortest path problem for weighted graphs with nonnegative edge weights.  
-It computes the shortest path from a source node \( s \) to all other nodes in a weighted graph \( G = (V, E) \), where:
-- \( V \) is the set of vertices (or nodes).
-- \( E \) is the set of edges, each with a nonnegative weight \( w(u,v) \geq 0 \).
+This repository provides an implementation of [Dijkstra’s Algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm) along with a detailed mathematical explanation. Dijkstra’s algorithm is a classic graph search method that solves the shortest path problem for weighted graphs with nonnegative edge weights.
 
-## Mathematical Explanation
+## Mathematical Foundations
 
-1. **Initialization:**
-   We start by assigning an initial distance value to every node in the graph. Let \( d(v) \) be the shortest known distance from \( s \) to \( v \). Initially, set:
-   $$
-   d(v) = \begin{equation} 
-   0 & \text{if } v = s \\[6pt]
-   \infty & \text{if } v \neq s
-   \end{equation}
-   $$
+**Given:**
+- A weighted graph \( G = (V, E) \) where each edge \((u,v) \in E\) has a nonnegative weight \( w(u,v) \geq 0 \).
+- A starting (source) node \( s \in V \).
 
-   This means the distance to the source node $ s $is 0, and for all others, it's set to infinity (or some very large number).
+**Goal:**  
+Find the shortest path from \( s \) to every other vertex \( v \in V \).
 
-2. **Set of Visited Nodes:**
-   Maintain a set $S$ of nodes whose shortest path from $ s $ has been found. Initially, $ S = \emptyset$
+### Initialization
 
-3. **Relaxation Step:**
-   At each iteration, we select a node \( u \notin S \) with the smallest tentative distance \( d(u) \). We then add \( u \) to \( S \).
+We define a distance function \( d(v) \) that holds the shortest known distance from the start node \( s \) to the node \( v \). Initialize:
 
-   For each neighbor \( v \) of \( u \), we check if the current known distance \( d(v) \) is greater than \( d(u) + w(u,v) \). If yes, we update:
+\[
+d(v) = \begin{cases}
+0 & \text{if } v = s \\[6pt]
+\infty & \text{otherwise}
+\end{cases}
+\]
+
+This means initially we know the shortest path to the start node itself is 0, and we have no knowledge of paths to other nodes, hence they are set to infinity.
+
+### Relaxation Step
+
+Dijkstra’s algorithm proceeds by iteratively selecting the node with the smallest temporary distance, say \( u \), that hasn’t been "finalized" yet. Then, for each neighbor \( v \) of \( u \):
+
+1. Compute a new tentative distance if we go via \( u \):
    \[
-   d(v) := d(u) + w(u,v).
+   \text{alt} = d(u) + w(u,v)
    \]
 
-   This step is known as **relaxation**, as it potentially lowers the estimates of the shortest paths.
+2. If \(\text{alt} < d(v)\), we update:
+   \[
+   d(v) := \text{alt}.
+   \]
 
-4. **Termination:**
-   Repeat the relaxation process until all nodes are in \( S \) or no smaller tentative distance can be found. At the end, \( d(v) \) holds the shortest distance from \( s \) to \( v \).
+This process is called **relaxation**, as it may reduce the current known shortest distance to \( v \).
 
-## Algorithm Outline
+### Algorithm Outline
 
-- **Input:** A weighted graph \( G \) with nonnegative weights, a start node \( s \).
-- **Output:** The shortest distances \( d(v) \) from \( s \) to every vertex \( v \).
+1. Initialize distances as above.
+2. Set all nodes as unvisited.  
+3. Choose the unvisited node with the smallest known distance. Let this node be \( u \).
+4. Update (relax) the distances to all neighbors of \( u \).
+5. Mark \( u \) as visited (the shortest path to \( u \) is now finalized).
+6. Repeat steps 3–5 until all nodes are visited or no smaller tentative distance can be found.
+
+When the algorithm finishes, \( d(v) \) will hold the shortest distance from \( s \) to \( v \).
+
+### Complexity
+
+If we use a priority queue (min-heap) to efficiently select the unvisited node with the smallest distance at each step, the complexity is:
+\[
+O(|E| \log |V|)
+\]
+where \(|V|\) is the number of vertices and \(|E|\) is the number of edges in the graph.
+
+## Code Example
+
+```python
+import heapq
+
+def dijkstra(graph, start):
+    """
+    Run Dijkstra's Algorithm on a given graph from a start node.
+
+    Parameters
+    ----------
+    graph : dict
+        Dictionary where keys are nodes and values are lists of (neighbor, weight) tuples.
+        Example:
+        graph = {
+            'A': [('B', 2), ('C', 5)],
+            'B': [('A', 2), ('C', 1), ('D', 4)],
+            'C': [('A', 5), ('B', 1), ('D', 2)],
+            'D': [('B', 4), ('C', 2)]
+        }
+
+    start : hashable
+        The starting node for the shortest path calculations.
+
+    Returns
+    -------
+    dist : dict
+        Shortest distance from 'start' to each node.
+    prev : dict
+        Predecessor map to reconstruct the shortest paths.
+    """
+    # Initialize distances to infinity except the start node
+    dist = {node: float('inf') for node in graph}
+    dist[start] = 0
+    prev = {node: None for node in graph}
+
+    # Priority queue for selecting the node with smallest distance
+    pq = [(0, start)]
+
+    while pq:
+        current_dist, u = heapq.heappop(pq)
+
+        # If this is not the most current distance, skip it
+        if current_dist > dist[u]:
+            continue
+
+        # Relax distances to neighbors
+        for v, w in graph[u]:
+            alt = dist[u] + w
+            if alt < dist[v]:
+                dist[v] = alt
+                prev[v] = u
+                heapq.heappush(pq, (alt, v))
+
+    return dist, prev
+
+# Example usage:
+if __name__ == "__main__":
+    graph_example = {
+        'A': [('B', 2), ('C', 5)],
+        'B': [('A', 2), ('C', 1), ('D', 4)],
+        'C': [('A', 5), ('B', 1), ('D', 2)],
+        'D': [('B', 4), ('C', 2)]
+    }
+
+    distances, predecessors = dijkstra(graph_example, 'A')
+    print("Shortest Distances:", distances)
+    print("Predecessors:", predecessors)
 
 **Pseudocode:**
