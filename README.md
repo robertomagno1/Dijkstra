@@ -29,14 +29,12 @@ This means initially we know the shortest path to the start node itself is 0, an
 Dijkstra’s algorithm proceeds by iteratively selecting the node with the smallest temporary distance, say \( u \), that hasn’t been "finalized" yet. Then, for each neighbor \( v \) of \( u \):
 
 1. Compute a new tentative distance if we go via \( u \):
-   $$
-   \text{alt} = d(u) + w(u,v)
-   $$
+   
+   $\text{alt} = d(u) + w(u,v)$
+   
 
 2. If \(\text{alt} < d(v)\), we update:
-   $$
-   d(v) := \text{alt}.
-   $$
+   $$d(v) := \text{alt}.$$
 
 This process is called **relaxation**, as it may reduce the current known shortest distance to \( v \).
 
