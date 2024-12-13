@@ -10,10 +10,10 @@ It computes the shortest path from a source node \( s \) to all other nodes in a
 1. **Initialization:**
    We start by assigning an initial distance value to every node in the graph. Let \( d(v) \) be the shortest known distance from \( s \) to \( v \). Initially, set:
    $$
-   d(v) = \begin{cases} 
+   d(v) = \begin{equation} 
    0 & \text{if } v = s \\[6pt]
    \infty & \text{if } v \neq s
-   \end{cases}
+   \end{equation}
    $$
 
    This means the distance to the source node $ s $is 0, and for all others, it's set to infinity (or some very large number).
