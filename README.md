@@ -15,12 +15,11 @@ Find the shortest path from \( s \) to every other vertex \( v \in V \).
 
 We define a distance function \( d(v) \) that holds the shortest known distance from the start node \( s \) to the node \( v \). Initialize:
 
-\[
-d(v) = \begin{cases}
+
+$$ d(v) = \begin{cases}
 0 & \text{if } v = s \\[6pt]
 \infty & \text{otherwise}
-\end{cases}
-\]
+\end{cases} $$
 
 This means initially we know the shortest path to the start node itself is 0, and we have no knowledge of paths to other nodes, hence they are set to infinity.
 
