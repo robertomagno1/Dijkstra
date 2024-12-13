@@ -35,7 +35,7 @@ Dijkstra’s algorithm proceeds by iteratively selecting the node with the small
 
 2. If \(\text{alt} < d(v)\), we update:
    
-   $d(v) := \text{alt}.$
+   $ d(v) := \text{alt} $
 
 This process is called **relaxation**, as it may reduce the current known shortest distance to \( v \).
 
