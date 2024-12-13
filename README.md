@@ -34,7 +34,7 @@ Dijkstra’s algorithm proceeds by iteratively selecting the node with the small
    
 
 2. If \(\text{alt} < d(v)\), we update:
-   $$d(v) := \text{alt}.$$
+   $d(v) := \text{alt}.$
 
 This process is called **relaxation**, as it may reduce the current known shortest distance to \( v \).
 
@@ -52,9 +52,9 @@ When the algorithm finishes, \( d(v) \) will hold the shortest distance from \( 
 ### Complexity
 
 If we use a priority queue (min-heap) to efficiently select the unvisited node with the smallest distance at each step, the complexity is:
-\[
-O(|E| \log |V|)
-\]
+
+$O(|E| \log |V|)$
+
 where \(|V|\) is the number of vertices and \(|E|\) is the number of edges in the graph.
 
 ## Code Example
